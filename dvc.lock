@@ -1,0 +1,85 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data/data_ingestion.py
+    deps:
+    - path: src/data/data_ingestion.py
+      hash: md5
+      md5: 204e56a66bef9e032b611d007e2b8a52
+      size: 2681
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: d9f700e45f5031cb0b2375f8ffa656d7.dir
+      size: 6717737
+      nfiles: 2
+  feature_engineering:
+    cmd: python src/features/feature_engineering.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: d9f700e45f5031cb0b2375f8ffa656d7.dir
+      size: 6717737
+      nfiles: 2
+    - path: src/features/feature_engineering.py
+      hash: md5
+      md5: 3da98c25fc12fb04b9a582be6991629b
+      size: 2680
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 7cc19e00255e6158681861cd123ec806.dir
+      size: 7225199
+      nfiles: 2
+  missing_value_imputation:
+    cmd: python src/imputation/missing_value_imputation.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 7cc19e00255e6158681861cd123ec806.dir
+      size: 7225199
+      nfiles: 2
+    - path: src/imputation/missing_value_imputation.py
+      hash: md5
+      md5: 8cdfdaa1b2faefccced3e0f7c5641d32
+      size: 3821
+    outs:
+    - path: data/imputations
+      hash: md5
+      md5: 70994d10244a03b4a9afbb3e5e1dff29.dir
+      size: 7120370
+      nfiles: 2
+  model_prediction:
+    cmd: python src/models/model_prediction.py
+    deps:
+    - path: data/imputations
+      hash: md5
+      md5: 70994d10244a03b4a9afbb3e5e1dff29.dir
+      size: 7120370
+      nfiles: 2
+    - path: src/models/model_prediction.py
+      hash: md5
+      md5: 6c0ee3530b15e597437942eb62561839
+      size: 4022
+    outs:
+    - path: model.pkl
+      hash: md5
+      md5: fd48edd5bf50a3e35d6d20ab9c59acdd
+      size: 58923344
+  model_submission:
+    cmd: python src/models/model_submission.py
+    deps:
+    - path: model.pkl
+      hash: md5
+      md5: fd48edd5bf50a3e35d6d20ab9c59acdd
+      size: 58923344
+    - path: src/models/model_submission.py
+      hash: md5
+      md5: 3a1f9d8cfc33f12677a2832c78419a20
+      size: 1906
+    outs:
+    - path: data/submission
+      hash: md5
+      md5: 92efae7ec3114c87aba4e0b7a4fb0d9f.dir
+      size: 413061
+      nfiles: 1
