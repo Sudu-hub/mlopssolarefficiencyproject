@@ -52,7 +52,7 @@ def process(train:pd.DataFrame, test:pd.DataFrame, *cols:str)->pd.DataFrame:
         logger.error(f'Data is not formated{e}')
         raise
 
-def save_data(data_path:str, train_data:str, test_data:str)->str:
+def save_data(data_path:str, train_data:pd.DataFrame, test_data:pd.DataFrame)->pd.DataFrame:
     try:
         os.mkdir(data_path)
         train_data.to_csv(os.path.join(data_path, "train1.csv"))
